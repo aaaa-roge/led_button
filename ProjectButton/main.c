@@ -41,6 +41,7 @@ void led_task() {
             currentPinIndex--;
             printf("L new pin/index = %d / %d\n", currentPinIndex, LED_PINS[currentPinIndex]);
             gpio_put(LED_PINS[currentPinIndex], 1);
+            vTaskDelay(10);
 
         }  else if(gpio_get(RIGHT_BUTTON_PIN) && currentPinIndex < LED_ARRAY_LENGTH-1 && buttonOpen) {
 
@@ -51,12 +52,13 @@ void led_task() {
             currentPinIndex++;
             printf("R new pin/index = %d / %d\n", currentPinIndex, LED_PINS[currentPinIndex]);
             gpio_put(LED_PINS[currentPinIndex], 1);
+            vTaskDelay(10);
 
         } else if(!gpio_get(LEFT_BUTTON_PIN) && !gpio_get(RIGHT_BUTTON_PIN)) {
 
             buttonOpen = true;
             printf("current pin/index = %d / %d\n", currentPinIndex, LED_PINS[currentPinIndex]);
-            
+
         }
     }
 }
