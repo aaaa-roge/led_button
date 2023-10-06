@@ -1,4 +1,7 @@
 add_executable(ledbutton
+    parts/ultrasonic.c
+    parts/button.c
+    parts/led_control.c
     main.c
 )
 
