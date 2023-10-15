@@ -3,7 +3,8 @@
 #include <stdio.h>
 #include "pico/stdlib.h"
 #include "semphr.h"
-#include "parts/led_control.h"
+#include "headers/led_control.h"
+
 // #include "ButtonControl.h"
 
 // LED array length, using define since it inits at compile time
@@ -19,8 +20,13 @@ uint LED_PINS[LED_ARRAY_LENGTH] = {22, 21, 20, 19, 18};
 const uint LEFT_BUTTON_PIN = 16;
 const uint RIGHT_BUTTON_PIN = 17;
 
+// pins for ultrasonic
+const uint TRIGGER_PIN = 3;
+const uint ECHO_PIN = 2;
+
 // button state so we can debounce
 bool buttonOpen = false;
+
 
 
 void controller_task() {
@@ -35,6 +41,25 @@ void controller_task() {
     }
 }
 
+
+// void loop_task() {
+
+//     while(1) {
+//         sleep_us(50);
+//         printf("sleep 50 done\n");
+//     }
+// }
+
+
+void dist_task() {
+    
+    while(1) {
+        get_distance(TRIGGER_PIN, ECHO_PIN);
+        printf("got distance!\n");
+    }
+}
+
+
 int main() {
     stdio_init_all();
 
@@ -44,8 +69,14 @@ int main() {
     init_button(LEFT_BUTTON_PIN);
     init_button(RIGHT_BUTTON_PIN);
 
+    // initialize ultrasonic
+    ultrasonic_init(TRIGGER_PIN, ECHO_PIN);
+
     // create button task
     xTaskCreate(controller_task, "controller_task", 256, NULL, 1, NULL);
+    // xTaskCreate(loop_task, "loop_task", 256, NULL, 1, NULL);
+    xTaskCreate(dist_task, "dist_task", 256, NULL, 100, NULL);
+
 
     // start task scheduler
     vTaskStartScheduler();

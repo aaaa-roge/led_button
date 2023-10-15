@@ -1,4 +1,4 @@
-#include "ultrasonic.h"
+#include "../headers/ultrasonic.h"
 #include "pico/stdlib.h"
 #include <stdio.h>
 
@@ -17,20 +17,23 @@ double get_distance(int triggerPin, int echoPin) {
     gpio_put(triggerPin, 0);
     sleep_us(2);
     gpio_put(triggerPin, 1);
-    sleep_us(10);
+    sleep_us(5);
     gpio_put(triggerPin, 0);
 
-    // check echo pulse
-    // wait for echo
-    while(gpio_get(echoPin) == 0) {
-    }
-
     long result = 0;
-    // if 1, we got something
-    while(gpio_get(echoPin) == 1) {
-        result++;
+    //check echo pulse
+    //wait for echo
+    printf("gpio echo = %d\n", gpio_get(echoPin));
+    if(gpio_get(echoPin) == 0) {
+        tight_loop_contents();
     }
-    printf("result = %d\n", result);
+    printf("echo = %d\n", gpio_get(echoPin));
+
+    // // if 1, we got something
+    // while(gpio_get(echoPin) == 1) {
+    //     result = 1;
+    // }
+    // printf("result = %d\n", result);
     return result;
 
 }

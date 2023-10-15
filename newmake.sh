@@ -5,4 +5,6 @@ rm -rf build
 mkdir build
 cd build
 cmake ..
-echo "if this worked run make at $PWD"
+make
+cd ProjectButton
+explorer.exe .
